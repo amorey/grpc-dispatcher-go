@@ -15,12 +15,11 @@
 package grpcdispatcher
 
 import (
-	"context"
-	"errors"
-	"testing"
+    "context"
+    "testing"
 
-	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc/balancer"
+    "github.com/stretchr/testify/require"
+    "google.golang.org/grpc/balancer"
 )
 
 type mockSubConn struct {
@@ -37,22 +36,22 @@ func TestPicker_Pick(t *testing.T) {
 		subConns: subConns,
 	}
 
-	tests := []struct {
-		name        string
-		ctxValue    string
-		expectedErr error
-	}{
-		{
-			name:        "SubConn exists for IP",
-			ctxValue:    "192.168.1.1",
-			expectedErr: nil,
-		},
-		{
-			name:        "SubConn does not exist for IP",
-			ctxValue:    "192.168.1.3",
-			expectedErr: errors.New("subconn for ip 192.168.1.3 not ready"),
-		},
-	}
+    tests := []struct {
+        name        string
+        ctxValue    string
+        expectedErr error
+    }{
+        {
+            name:        "SubConn exists for IP",
+            ctxValue:    "192.168.1.1",
+            expectedErr: nil,
+        },
+        {
+            name:        "SubConn does not exist for IP",
+            ctxValue:    "192.168.1.3",
+            expectedErr: balancer.ErrNoSubConnAvailable,
+        },
+    }
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
